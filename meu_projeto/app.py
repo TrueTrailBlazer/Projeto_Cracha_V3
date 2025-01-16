@@ -2,23 +2,25 @@ import os
 from PIL import Image, ImageDraw, ImageFont
 import streamlit as st
 
-# Caminho fixo para o template do crachá
-TEMPLATE_PATH = "static/template_cracha.jpg"
-
 # Função para gerar o crachá
 def gerar_cracha(nome, rg, cpf, foto_path=None):
     try:
+        # Definir o caminho absoluto do template
+        template_path = os.path.join(os.path.dirname(__file__), 'static', 'template_cracha.jpg')
+
         # Abrir o template
-        template = Image.open(TEMPLATE_PATH)
+        template = Image.open(template_path)
         draw = ImageDraw.Draw(template)
 
-        # Definir a fonte e as coordenadas do texto
-        fonte = ImageFont.truetype("arial.ttf", 37)  # Substitua por uma fonte válida no seu sistema
+        # Configurações de texto e fonte
+        fonte = ImageFont.truetype("arial.ttf", 37)  # Ajuste a fonte conforme disponível no seu sistema
+
+        # Coordenadas para os campos de texto
         coord_nome = (50, 175)
         coord_rg = (50, 225)
         coord_cpf = (50, 275)
 
-        # Adicionar os textos ao template
+        # Adicionar os textos
         draw.text(coord_nome, f"Nome: {nome}", fill="black", font=fonte)
         draw.text(coord_rg, f"RG: {rg}", fill="black", font=fonte)
         draw.text(coord_cpf, f"CPF: {cpf}", fill="black", font=fonte)
@@ -39,35 +41,34 @@ def gerar_cracha(nome, rg, cpf, foto_path=None):
         output_path = "cracha_gerado.png"
         template.save(output_path)
         template.close()
+
         return output_path
     except Exception as e:
         st.error(f"Erro ao gerar o crachá: {e}")
         return None
 
-# Configuração do Streamlit
-st.title("Gerador de Crachás")
-st.write("Preencha as informações abaixo e envie a foto da pessoa para gerar o crachá.")
+# Interface do Streamlit
+st.title("Gerador de Crachá")
 
 # Entradas do usuário
-nome = st.text_input("Nome")
-rg = st.text_input("RG")
-cpf = st.text_input("CPF")
-foto_file = st.file_uploader("Faça upload de uma foto", type=["jpg", "png", "jpeg"])
+nome = st.text_input("Digite o nome:")
+rg = st.text_input("Digite o RG:")
+cpf = st.text_input("Digite o CPF:")
+foto = st.file_uploader("Envie a foto do usuário (opcional)", type=["jpg", "jpeg", "png"])
 
 # Botão para gerar o crachá
 if st.button("Gerar Crachá"):
-    if not nome or not rg or not cpf:
-        st.error("Por favor, preencha todos os campos de texto.")
-    else:
+    if nome and rg and cpf:
         foto_path = None
-        if foto_file:
-            foto_path = f"temp_foto_{foto_file.name}"
+        if foto:
+            foto_path = os.path.join(os.getcwd(), foto.name)
             with open(foto_path, "wb") as f:
-                f.write(foto_file.getbuffer())
+                f.write(foto.read())
 
         # Gerar o crachá
-        output_path = gerar_cracha(nome, rg, cpf, foto_path)
-
-        if output_path:
+        cracha_path = gerar_cracha(nome, rg, cpf, foto_path)
+        if cracha_path:
             st.success("Crachá gerado com sucesso!")
-            st.image(output_path, caption="Crachá Gerado", use_column_width=True)
+            st.image(cracha_path, caption="Crachá Gerado")
+    else:
+        st.error("Preencha todos os campos obrigatórios!")
