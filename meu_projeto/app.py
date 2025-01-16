@@ -28,8 +28,8 @@ def gerar_cracha(nome, rg, cpf, foto_path=None):
         draw = ImageDraw.Draw(template)
 
         # Configuração das fontes e tamanhos
-        fonte_nome = carregar_fonte(40)  # Fonte maior para o nome
-        fonte_dados = carregar_fonte(35)  # Fonte padrão para RG e CPF
+        fonte_nome = carregar_fonte(35)  # Fonte maior para o nome
+        fonte_dados = carregar_fonte(30)  # Fonte padrão para RG e CPF
 
         # Coordenadas para os campos de texto
         coord_nome = (50, 175)
