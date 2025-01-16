@@ -27,7 +27,7 @@ def gerar_cracha(nome, rg, cpf, foto_path=None):
         draw = ImageDraw.Draw(template)
 
         # Carregar a fonte
-        fonte = carregar_fonte(37)
+        fonte = carregar_fonte(80)
 
         # Coordenadas para os campos de texto
         coord_nome = (50, 175)
