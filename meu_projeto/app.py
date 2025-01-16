@@ -2,18 +2,32 @@ import os
 from PIL import Image, ImageDraw, ImageFont
 import streamlit as st
 
+# Função para carregar a fonte
+def carregar_fonte(tamanho):
+    try:
+        # Tente carregar a fonte padrão Arial
+        return ImageFont.truetype("arial.ttf", tamanho)
+    except IOError:
+        # Caminho alternativo para Arial no Windows
+        fonte_alternativa = os.path.join("C:\\Windows\\Fonts", "arial.ttf")
+        if os.path.exists(fonte_alternativa):
+            return ImageFont.truetype(fonte_alternativa, tamanho)
+        else:
+            # Fonte genérica do PIL se Arial não estiver disponível
+            return ImageFont.load_default()
+
 # Função para gerar o crachá
 def gerar_cracha(nome, rg, cpf, foto_path=None):
     try:
-        # Definir o caminho absoluto do template
+        # Caminho absoluto do template
         template_path = os.path.join(os.path.dirname(__file__), 'static', 'template_cracha.jpg')
 
         # Abrir o template
         template = Image.open(template_path)
         draw = ImageDraw.Draw(template)
 
-        # Configurações de texto e fonte
-        fonte = ImageFont.truetype("arial.ttf", 37)  # Ajuste a fonte conforme disponível no seu sistema
+        # Carregar a fonte
+        fonte = carregar_fonte(37)
 
         # Coordenadas para os campos de texto
         coord_nome = (50, 175)
