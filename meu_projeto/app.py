@@ -5,7 +5,9 @@ import streamlit as st
 # Função para carregar fonte com suporte a negrito
 def carregar_fonte(tamanho):
     try:
-        return ImageFont.truetype("arialbd.ttf", tamanho)  # Fonte Arial Bold
+        # Verifique o caminho da fonte, ou forneça um caminho absoluto
+        fonte_path = os.path.join(os.path.dirname(__file__), "arialbd.ttf")
+        return ImageFont.truetype(fonte_path, tamanho)  # Fonte Arial Bold
     except Exception as e:
         print(f"Erro ao carregar a fonte: {e}")
         raise
