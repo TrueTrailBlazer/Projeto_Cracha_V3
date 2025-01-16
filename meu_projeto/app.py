@@ -5,9 +5,11 @@ import streamlit as st
 # Função para carregar fonte com suporte a negrito
 def carregar_fonte(tamanho):
     try:
-        # Verifique o caminho da fonte, ou forneça um caminho absoluto
+        # Verificando o caminho da fonte, ou usando uma fonte alternativa embutida
         fonte_path = os.path.join(os.path.dirname(__file__), "arialbd.ttf")
-        return ImageFont.truetype(fonte_path, tamanho)  # Fonte Arial Bold
+        if not os.path.exists(fonte_path):  # Se a fonte não for encontrada, usa uma fonte padrão
+            fonte_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"  # Fonte alternativa
+        return ImageFont.truetype(fonte_path, tamanho)
     except Exception as e:
         print(f"Erro ao carregar a fonte: {e}")
         raise
@@ -17,6 +19,11 @@ def gerar_cracha(nome, rg, cpf, foto_path=None):
     try:
         # Caminho absoluto para o template
         template_path = os.path.join(os.path.dirname(__file__), "static", "template_cracha.jpg")
+        
+        # Verificar se o template existe
+        if not os.path.exists(template_path):
+            raise FileNotFoundError(f"Template não encontrado: {template_path}")
+        
         template = Image.open(template_path)
         draw = ImageDraw.Draw(template)
 
