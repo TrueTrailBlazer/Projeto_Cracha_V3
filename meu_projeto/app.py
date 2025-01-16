@@ -7,7 +7,7 @@ def carregar_fonte(tamanho):
     try:
         return ImageFont.truetype("arialbd.ttf", tamanho)  # Fonte Arial Bold
     except Exception as e:
-        st.error(f"Erro ao carregar a fonte: {e}")
+        print(f"Erro ao carregar a fonte: {e}")
         raise
 
 # Função para gerar o crachá
@@ -61,10 +61,6 @@ rg = st.text_input("RG:")
 cpf = st.text_input("CPF:")
 foto = st.file_uploader("Envie uma foto (opcional):", type=["jpg", "jpeg", "png"])
 
-# Verificar e criar a pasta `static` se não existir
-if not os.path.exists("static"):
-    os.makedirs("static")
-
 # Botão para gerar o crachá
 if st.button("Gerar Crachá"):
     if nome and rg and cpf:
@@ -72,11 +68,8 @@ if st.button("Gerar Crachá"):
         foto_path = None
         if foto:
             foto_path = os.path.join("static", "foto_temp.jpg")
-            try:
-                with open(foto_path, "wb") as f:
-                    f.write(foto.read())
-            except Exception as e:
-                st.error(f"Erro ao salvar a foto: {e}")
+            with open(foto_path, "wb") as f:
+                f.write(foto.read())
         # Gerar o crachá
         output_path = gerar_cracha(nome, rg, cpf, foto_path)
         if output_path:
