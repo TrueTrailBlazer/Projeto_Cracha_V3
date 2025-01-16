@@ -13,8 +13,8 @@ def carregar_fonte(tamanho):
 # Função para gerar o crachá
 def gerar_cracha(nome, rg, cpf, foto_path=None):
     try:
-        # Carregar o template
-        template_path = os.path.join("static", "template_cracha.jpg")
+        # Caminho absoluto para o template
+        template_path = os.path.join(os.path.dirname(__file__), "static", "template_cracha.jpg")
         template = Image.open(template_path)
         draw = ImageDraw.Draw(template)
 
