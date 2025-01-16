@@ -63,6 +63,10 @@ rg = st.text_input("RG:")
 cpf = st.text_input("CPF:")
 foto = st.file_uploader("Envie uma foto (opcional):", type=["jpg", "jpeg", "png"])
 
+# Criar a pasta 'static' se não existir
+if not os.path.exists("static"):
+    os.makedirs("static")
+
 # Botão para gerar o crachá
 if st.button("Gerar Crachá"):
     if nome and rg and cpf:
