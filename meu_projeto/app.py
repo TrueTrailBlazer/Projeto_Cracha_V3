@@ -106,9 +106,9 @@ with col1:
     rg_formatado = formatar_rg(rg)
     cpf_formatado = formatar_cpf(cpf)
 
-    # Entrada com valores formatados
-    st.text_input("RG:", value=rg_formatado, key="rg")
-    st.text_input("CPF:", value=cpf_formatado, key="cpf")
+    # Atualiza os campos de entrada com os valores formatados
+    rg_formatado = st.text_input("RG:", value=rg_formatado, max_chars=12)
+    cpf_formatado = st.text_input("CPF:", value=cpf_formatado, max_chars=14)
     
     foto = st.file_uploader("Envie uma foto (opcional):", type=["jpg", "jpeg", "png"])
 
