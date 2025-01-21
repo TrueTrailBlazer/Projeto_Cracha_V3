@@ -64,8 +64,8 @@ def gerar_cracha(nome, rg, cpf, foto_path=None):
 # Interface Streamlit
 st.title("Gerador de Crachás")
 
-# Divisão da tela em duas colunas ajustadas
-col1, col2 = st.columns([2, 3])  # A coluna da esquerda ocupa 2 partes e a da direita ocupa 3 partes
+# Divisão da tela em duas colunas ajustadas com mais espaçamento entre elas
+col1, col2 = st.columns([4, 6])  # Coluna da esquerda ocupa 4 partes, a da direita ocupa 6 partes
 
 # Coluna da esquerda (campos de entrada)
 with col1:
@@ -76,8 +76,8 @@ with col1:
     cpf = st.text_input("CPF:")
     foto = st.file_uploader("Envie uma foto (opcional):", type=["jpg", "jpeg", "png"])
 
-    # Adicionando espaçamento entre o botão e os campos
-    st.markdown("<br><br>", unsafe_allow_html=True)  # Espaçamento para separar o botão de gerar do formulário
+    # Adicionando mais espaçamento entre o botão e os campos
+    st.markdown("<br><br><br>", unsafe_allow_html=True)  # Maior espaçamento para separar o botão de gerar
 
     # Botão para gerar o crachá
     if st.button("Gerar Crachá"):
