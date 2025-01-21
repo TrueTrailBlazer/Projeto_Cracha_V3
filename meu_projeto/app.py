@@ -65,7 +65,7 @@ def gerar_cracha(nome, rg, cpf, foto_path=None):
 st.title("Gerador de Crachás")
 
 # Divisão da tela em duas colunas ajustadas
-col1, col2 = st.columns([1, 2])  # Ajuste o valor para dar mais espaço para a coluna da direita
+col1, col2 = st.columns([2, 3])  # Agora as colunas têm proporções mais equilibradas
 
 # Coluna da esquerda (campos de entrada)
 with col1:
