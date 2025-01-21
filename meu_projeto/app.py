@@ -1,38 +1,26 @@
 import os
-import re
 from PIL import Image, ImageDraw, ImageFont
 import streamlit as st
 
 # Função para carregar fonte com suporte a negrito
 def carregar_fonte(tamanho):
     try:
+        # Verificando o caminho da fonte, ou usando uma fonte alternativa embutida
         fonte_path = os.path.join(os.path.dirname(__file__), "arialbd.ttf")
-        if not os.path.exists(fonte_path):  # Se a fonte não for encontrada, usa uma fonte alternativa
+        if not os.path.exists(fonte_path):  # Se a fonte não for encontrada, usa uma fonte padrão
             fonte_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"  # Fonte alternativa
         return ImageFont.truetype(fonte_path, tamanho)
     except Exception as e:
         print(f"Erro ao carregar a fonte: {e}")
         raise
 
-# Função para formatar CPF
-def formatar_cpf(cpf):
-    cpf = re.sub(r'[^0-9]', '', cpf)  # Remove qualquer coisa que não seja número
-    if len(cpf) == 11:  # Verifica se o CPF tem 11 números
-        return f"{cpf[:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}"
-    return cpf
-
-# Função para formatar RG
-def formatar_rg(rg):
-    rg = re.sub(r'[^0-9]', '', rg)  # Remove qualquer coisa que não seja número
-    if len(rg) == 9:  # Verifica se o RG tem 9 números
-        return f"{rg[:2]}.{rg[2:5]}.{rg[5:8]}-{rg[8:]}"
-    return rg
-
 # Função para gerar o crachá
 def gerar_cracha(nome, rg, cpf, foto_path=None):
     try:
+        # Caminho absoluto para o template
         template_path = os.path.join(os.path.dirname(__file__), "static", "template_cracha.jpg")
         
+        # Verificar se o template existe
         if not os.path.exists(template_path):
             raise FileNotFoundError(f"Template não encontrado: {template_path}")
         
@@ -96,17 +84,8 @@ with col1:
     st.markdown("### Preencha os dados abaixo")
     # Entrada de dados do usuário
     nome = st.text_input("Nome:")
-    rg = st.text_input("RG:", value="", max_chars=12)
-    cpf = st.text_input("CPF:", value="", max_chars=14)
-    
-    # Formatar os campos de RG e CPF ao digitar
-    rg_formatado = formatar_rg(rg)
-    cpf_formatado = formatar_cpf(cpf)
-
-    # Atualiza os campos de entrada com os valores formatados
-    rg_formatado = st.text_input("RG (formatado):", value=rg_formatado, max_chars=12)
-    cpf_formatado = st.text_input("CPF (formatado):", value=cpf_formatado, max_chars=14)
-    
+    rg = st.text_input("RG:")
+    cpf = st.text_input("CPF:")
     foto = st.file_uploader("Envie uma foto (opcional):", type=["jpg", "jpeg", "png"])
 
     # Botão para gerar o crachá
@@ -119,7 +98,7 @@ with col1:
                 with open(foto_path, "wb") as f:
                     f.write(foto.read())
             # Gerar o crachá
-            output_path = gerar_cracha(nome, rg_formatado, cpf_formatado, foto_path)
+            output_path = gerar_cracha(nome, rg, cpf, foto_path)
             if output_path:
                 st.success("Crachá gerado com sucesso!")
         else:
@@ -128,7 +107,7 @@ with col1:
 # Coluna da direita (crachá gerado)
 with col2:
     if nome and rg and cpf:
-        output_path = gerar_cracha(nome, rg_formatado, cpf_formatado, foto_path)
+        output_path = gerar_cracha(nome, rg, cpf, foto_path)
         if output_path:
             st.image(output_path, use_container_width=True)  # Usando container_width para a imagem se ajustar
             # Botão para baixar o crachá
