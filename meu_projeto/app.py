@@ -1,4 +1,5 @@
 import os
+import re
 from PIL import Image, ImageDraw, ImageFont
 import streamlit as st
 
@@ -13,6 +14,20 @@ def carregar_fonte(tamanho):
     except Exception as e:
         print(f"Erro ao carregar a fonte: {e}")
         raise
+
+# Função para formatar CPF
+def formatar_cpf(cpf):
+    cpf = re.sub(r'[^0-9]', '', cpf)  # Remove qualquer coisa que não seja número
+    if len(cpf) == 11:  # Verifica se o CPF tem 11 números
+        return f"{cpf[:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}"
+    return cpf
+
+# Função para formatar RG
+def formatar_rg(rg):
+    rg = re.sub(r'[^0-9]', '', rg)  # Remove qualquer coisa que não seja número
+    if len(rg) >= 9:  # Verifica se o RG tem pelo menos 9 números
+        return f"{rg[:2]}.{rg[2:5]}.{rg[5:8]}-{rg[8:]}"
+    return rg
 
 # Função para gerar o crachá
 def gerar_cracha(nome, rg, cpf, foto_path=None):
@@ -65,7 +80,7 @@ def gerar_cracha(nome, rg, cpf, foto_path=None):
 st.title("Gerador de Crachás")
 
 # Criar colunas com um espaçamento explícito utilizando o estilo CSS
-col1, col2 = st.columns([5, 5])  # Ambas as colunas com a mesma largura
+col1, col2 = st.columns([1, 1])  # Ambas as colunas com a mesma largura
 
 # CSS para adicionar o espaçamento entre as colunas
 st.markdown(
@@ -84,8 +99,17 @@ with col1:
     st.markdown("### Preencha os dados abaixo")
     # Entrada de dados do usuário
     nome = st.text_input("Nome:")
-    rg = st.text_input("RG:")
-    cpf = st.text_input("CPF:")
+    rg = st.text_input("RG:", value="", max_chars=12)
+    cpf = st.text_input("CPF:", value="", max_chars=14)
+    
+    # Formatar os campos de RG e CPF ao digitar
+    rg_formatado = formatar_rg(rg)
+    cpf_formatado = formatar_cpf(cpf)
+
+    # Entrada com valores formatados
+    st.text_input("RG:", value=rg_formatado, key="rg")
+    st.text_input("CPF:", value=cpf_formatado, key="cpf")
+    
     foto = st.file_uploader("Envie uma foto (opcional):", type=["jpg", "jpeg", "png"])
 
     # Botão para gerar o crachá
@@ -98,7 +122,7 @@ with col1:
                 with open(foto_path, "wb") as f:
                     f.write(foto.read())
             # Gerar o crachá
-            output_path = gerar_cracha(nome, rg, cpf, foto_path)
+            output_path = gerar_cracha(nome, rg_formatado, cpf_formatado, foto_path)
             if output_path:
                 st.success("Crachá gerado com sucesso!")
         else:
@@ -107,7 +131,7 @@ with col1:
 # Coluna da direita (crachá gerado)
 with col2:
     if nome and rg and cpf:
-        output_path = gerar_cracha(nome, rg, cpf, foto_path)
+        output_path = gerar_cracha(nome, rg_formatado, cpf_formatado, foto_path)
         if output_path:
             st.image(output_path, use_container_width=True)  # Usando container_width para a imagem se ajustar
             # Botão para baixar o crachá
