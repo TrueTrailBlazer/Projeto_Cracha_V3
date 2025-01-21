@@ -65,7 +65,7 @@ def gerar_cracha(nome, rg, cpf, foto_path=None):
 st.title("Gerador de Crachás")
 
 # Divisão da tela em duas colunas ajustadas
-col1, col2 = st.columns([2, 3])  # Agora as colunas têm proporções mais equilibradas
+col1, col2 = st.columns([2, 3])  # A coluna da esquerda ocupa 2 partes e a da direita ocupa 3 partes
 
 # Coluna da esquerda (campos de entrada)
 with col1:
@@ -76,9 +76,10 @@ with col1:
     cpf = st.text_input("CPF:")
     foto = st.file_uploader("Envie uma foto (opcional):", type=["jpg", "jpeg", "png"])
 
-# Coluna da direita (onde o crachá será exibido)
-with col2:
-    st.markdown("### Crachá Gerado")
+    # Adicionando espaçamento entre o botão e os campos
+    st.markdown("<br><br>", unsafe_allow_html=True)  # Espaçamento para separar o botão de gerar do formulário
+
+    # Botão para gerar o crachá
     if st.button("Gerar Crachá"):
         if nome and rg and cpf:
             # Salvar a foto carregada, se houver
@@ -92,8 +93,15 @@ with col2:
             if output_path:
                 st.success("Crachá gerado com sucesso!")
                 # Exibe o crachá gerado na coluna da direita
-                st.image(output_path, use_container_width=True)  # Usando container_width para a imagem se ajustar
-                # Botão para baixar o crachá
-                st.download_button(label="Baixar Crachá", data=open(output_path, "rb"), file_name="cracha_gerado.png", mime="image/png")
+                with col2:
+                    st.image(output_path, use_container_width=True)  # Usando container_width para a imagem se ajustar
+                    # Botão para baixar o crachá
+                    st.download_button(label="Baixar Crachá", data=open(output_path, "rb"), file_name="cracha_gerado.png", mime="image/png")
         else:
             st.error("Por favor, preencha todos os campos obrigatórios.")
+
+# Coluna da direita (onde o crachá será exibido)
+with col2:
+    st.markdown("### Crachá Gerado")
+    # Aqui fica o crachá gerado, que será exibido depois de pressionar o botão
+    pass  # O crachá será exibido no bloco acima
