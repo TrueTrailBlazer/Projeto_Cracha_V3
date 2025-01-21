@@ -94,7 +94,7 @@ with col1:
                 st.success("Crachá gerado com sucesso!")
                 # Exibir o crachá gerado na coluna 2
                 with col2:
-                    st.image(output_path, caption="Crachá Gerado", use_column_width=True)
+                    st.image(output_path, caption="Crachá Gerado", use_container_width=True)
                 
                     # Botão para download do crachá gerado
                     with open(output_path, "rb") as file:
