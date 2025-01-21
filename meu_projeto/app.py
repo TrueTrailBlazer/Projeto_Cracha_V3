@@ -65,7 +65,7 @@ def gerar_cracha(nome, rg, cpf, foto_path=None):
 st.title("Gerador de Crachás")
 
 # Criar colunas com o mesmo tamanho, com um espaçamento entre elas
-col1, col2 = st.columns([3, 3])  # Ambas as colunas ocupam o mesmo tamanho, mas o espaçamento entre elas é maior.
+col1, col2 = st.columns([8, 8])  # Ambas as colunas ocupam o mesmo tamanho, mas o espaçamento entre elas é maior.
 
 # Coluna da esquerda (campos de entrada)
 with col1:
