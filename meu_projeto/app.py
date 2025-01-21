@@ -65,7 +65,7 @@ def gerar_cracha(nome, rg, cpf, foto_path=None):
 st.title("Gerador de Crachás")
 
 # Divisão da tela em duas colunas de tamanho igual
-col1, col2 = st.columns([1, 1])
+col1, col2 = st.columns([2, 3])  # Ajuste aqui para dar mais espaço para a direita
 
 # Coluna da esquerda (campos de entrada)
 with col1:
@@ -75,11 +75,8 @@ with col1:
     cpf = st.text_input("CPF:")
     foto = st.file_uploader("Envie uma foto (opcional):", type=["jpg", "jpeg", "png"])
 
-    # Criar a pasta 'static' se não existir
-    if not os.path.exists("static"):
-        os.makedirs("static")
-
-    # Botão para gerar o crachá
+# Coluna da direita (onde o crachá será exibido)
+with col2:
     if st.button("Gerar Crachá"):
         if nome and rg and cpf:
             # Salvar a foto carregada, se houver
@@ -92,17 +89,8 @@ with col1:
             output_path = gerar_cracha(nome, rg, cpf, foto_path)
             if output_path:
                 st.success("Crachá gerado com sucesso!")
-                # Exibir o crachá gerado na coluna 2, ajustando para ficar mais para cima e à direita
-                with col2:
-                    st.image(output_path, caption="Crachá Gerado", use_container_width=True)
-                    
-                    # Botão para download do crachá gerado
-                    with open(output_path, "rb") as file:
-                        st.download_button(
-                            label="Baixar Crachá",
-                            data=file,
-                            file_name="cracha_gerado.png",
-                            mime="image/png"
-                        )
+                st.image(output_path, use_container_width=True)  # Aqui a imagem será exibida com largura ajustada
+                # Botão de download
+                st.download_button(label="Baixar Crachá", data=open(output_path, "rb"), file_name="cracha_gerado.png", mime="image/png")
         else:
             st.error("Por favor, preencha todos os campos obrigatórios.")
