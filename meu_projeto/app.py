@@ -25,7 +25,7 @@ def formatar_cpf(cpf):
 # Função para formatar RG
 def formatar_rg(rg):
     rg = re.sub(r'[^0-9]', '', rg)  # Remove qualquer coisa que não seja número
-    if len(rg) >= 9:  # Verifica se o RG tem pelo menos 9 números
+    if len(rg) == 9:  # Verifica se o RG tem 9 números
         return f"{rg[:2]}.{rg[2:5]}.{rg[5:8]}-{rg[8:]}"
     return rg
 
