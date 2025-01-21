@@ -64,7 +64,7 @@ def gerar_cracha(nome, rg, cpf, foto_path=None):
 # Interface Streamlit
 st.title("Gerador de Crachás")
 
-# Divisão da tela em duas colunas
+# Divisão da tela em duas colunas ajustadas
 col1, col2 = st.columns([1, 2])  # Ajuste o valor para dar mais espaço para a coluna da direita
 
 # Coluna da esquerda (campos de entrada)
