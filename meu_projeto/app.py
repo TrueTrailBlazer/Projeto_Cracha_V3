@@ -69,6 +69,7 @@ col1, col2 = st.columns([1, 2])  # Ajuste o valor para dar mais espaço para a c
 
 # Coluna da esquerda (campos de entrada)
 with col1:
+    st.markdown("### Preencha os dados abaixo")
     # Entrada de dados do usuário
     nome = st.text_input("Nome:")
     rg = st.text_input("RG:")
@@ -77,6 +78,7 @@ with col1:
 
 # Coluna da direita (onde o crachá será exibido)
 with col2:
+    st.markdown("### Crachá Gerado")
     if st.button("Gerar Crachá"):
         if nome and rg and cpf:
             # Salvar a foto carregada, se houver
