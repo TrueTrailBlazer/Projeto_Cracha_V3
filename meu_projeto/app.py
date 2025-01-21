@@ -65,7 +65,7 @@ def gerar_cracha(nome, rg, cpf, foto_path=None):
 st.title("Gerador de Crachás")
 
 # Criar colunas com um espaçamento explícito utilizando o estilo CSS
-col1, col2 = st.columns([1, 1])  # Ambas as colunas com a mesma largura
+col1, col2 = st.columns([5, 5])  # Ambas as colunas com a mesma largura
 
 # CSS para adicionar o espaçamento entre as colunas
 st.markdown(
