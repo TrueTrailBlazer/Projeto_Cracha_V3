@@ -64,8 +64,8 @@ def gerar_cracha(nome, rg, cpf, foto_path=None):
 # Interface Streamlit
 st.title("Gerador de Crachás")
 
-# Divisão da tela em duas colunas: uma para entradas e outra para o crachá
-col1, col2 = st.columns([1, 2])  # Relacionamento de 33% para a coluna da esquerda e 66% para a coluna da direita
+# Divisão da tela em duas colunas de tamanho igual
+col1, col2 = st.columns([1, 1])
 
 # Coluna da esquerda (campos de entrada)
 with col1:
@@ -95,7 +95,7 @@ with col1:
                 # Exibir o crachá gerado na coluna 2
                 with col2:
                     st.image(output_path, caption="Crachá Gerado", use_container_width=True)
-                
+                    
                     # Botão para download do crachá gerado
                     with open(output_path, "rb") as file:
                         st.download_button(
@@ -106,3 +106,6 @@ with col1:
                         )
         else:
             st.error("Por favor, preencha todos os campos obrigatórios.")
+
+# Adicionando espaçamento entre as colunas para um layout mais harmônico
+st.write("\n" * 2)
