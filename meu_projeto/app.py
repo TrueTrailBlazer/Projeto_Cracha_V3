@@ -76,10 +76,8 @@ with col1:
     cpf = st.text_input("CPF:")
     foto = st.file_uploader("Envie uma foto (opcional):", type=["jpg", "jpeg", "png"])
 
-    # Adicionando mais espaçamento entre o botão e os campos
-    st.markdown("<br><br><br>", unsafe_allow_html=True)  # Maior espaçamento para separar o botão de gerar
-
     # Botão para gerar o crachá
+    st.markdown("<br><br><br>", unsafe_allow_html=True)  # Adicionando mais espaçamento entre o botão e os campos
     if st.button("Gerar Crachá"):
         if nome and rg and cpf:
             # Salvar a foto carregada, se houver
@@ -99,9 +97,3 @@ with col1:
                     st.download_button(label="Baixar Crachá", data=open(output_path, "rb"), file_name="cracha_gerado.png", mime="image/png")
         else:
             st.error("Por favor, preencha todos os campos obrigatórios.")
-
-# Coluna da direita (onde o crachá será exibido)
-with col2:
-    st.markdown("### Crachá Gerado")
-    # Aqui fica o crachá gerado, que será exibido depois de pressionar o botão
-    pass  # O crachá será exibido no bloco acima
