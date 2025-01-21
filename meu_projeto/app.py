@@ -64,8 +64,20 @@ def gerar_cracha(nome, rg, cpf, foto_path=None):
 # Interface Streamlit
 st.title("Gerador de Crachás")
 
-# Criar colunas com o mesmo tamanho, com um espaçamento entre elas
-col1, col2 = st.columns([8, 8])  # Ambas as colunas ocupam o mesmo tamanho, mas o espaçamento entre elas é maior.
+# Criar colunas com um espaçamento explícito utilizando o estilo CSS
+col1, col2 = st.columns([1, 1])  # Ambas as colunas com a mesma largura
+
+# CSS para adicionar o espaçamento entre as colunas
+st.markdown(
+    """
+    <style>
+    .block-container {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+    </style>
+    """, unsafe_allow_html=True
+)
 
 # Coluna da esquerda (campos de entrada)
 with col1:
