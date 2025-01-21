@@ -64,12 +64,8 @@ def gerar_cracha(nome, rg, cpf, foto_path=None):
 # Interface Streamlit
 st.title("Gerador de Crachás")
 
-# Criar colunas com mesmo tamanho e com espaçamento entre elas
-col1, col2 = st.columns([1, 1])  # Ambas as colunas ocupam o mesmo tamanho (1:1)
-
-# Adicionar um espaçamento entre as colunas
-col1.markdown('<div style="height: 50px;"></div>', unsafe_allow_html=True)  # Espaço acima da primeira coluna
-col2.markdown('<div style="height: 50px;"></div>', unsafe_allow_html=True)  # Espaço acima da segunda coluna
+# Criar colunas com o mesmo tamanho, com um espaçamento entre elas
+col1, col2 = st.columns([3, 3])  # Ambas as colunas ocupam o mesmo tamanho, mas o espaçamento entre elas é maior.
 
 # Coluna da esquerda (campos de entrada)
 with col1:
@@ -93,10 +89,14 @@ with col1:
             output_path = gerar_cracha(nome, rg, cpf, foto_path)
             if output_path:
                 st.success("Crachá gerado com sucesso!")
-                # Exibe o crachá gerado na coluna da direita
-                with col2:
-                    st.image(output_path, use_container_width=True)  # Usando container_width para a imagem se ajustar
-                    # Botão para baixar o crachá
-                    st.download_button(label="Baixar Crachá", data=open(output_path, "rb"), file_name="cracha_gerado.png", mime="image/png")
         else:
             st.error("Por favor, preencha todos os campos obrigatórios.")
+
+# Coluna da direita (crachá gerado)
+with col2:
+    if nome and rg and cpf:
+        output_path = gerar_cracha(nome, rg, cpf, foto_path)
+        if output_path:
+            st.image(output_path, use_container_width=True)  # Usando container_width para a imagem se ajustar
+            # Botão para baixar o crachá
+            st.download_button(label="Baixar Crachá", data=open(output_path, "rb"), file_name="cracha_gerado.png", mime="image/png")
