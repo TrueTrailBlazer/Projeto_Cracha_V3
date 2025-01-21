@@ -6,9 +6,8 @@ import streamlit as st
 # Função para carregar fonte com suporte a negrito
 def carregar_fonte(tamanho):
     try:
-        # Verificando o caminho da fonte, ou usando uma fonte alternativa embutida
         fonte_path = os.path.join(os.path.dirname(__file__), "arialbd.ttf")
-        if not os.path.exists(fonte_path):  # Se a fonte não for encontrada, usa uma fonte padrão
+        if not os.path.exists(fonte_path):  # Se a fonte não for encontrada, usa uma fonte alternativa
             fonte_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"  # Fonte alternativa
         return ImageFont.truetype(fonte_path, tamanho)
     except Exception as e:
@@ -32,10 +31,8 @@ def formatar_rg(rg):
 # Função para gerar o crachá
 def gerar_cracha(nome, rg, cpf, foto_path=None):
     try:
-        # Caminho absoluto para o template
         template_path = os.path.join(os.path.dirname(__file__), "static", "template_cracha.jpg")
         
-        # Verificar se o template existe
         if not os.path.exists(template_path):
             raise FileNotFoundError(f"Template não encontrado: {template_path}")
         
@@ -107,8 +104,8 @@ with col1:
     cpf_formatado = formatar_cpf(cpf)
 
     # Atualiza os campos de entrada com os valores formatados
-    rg_formatado = st.text_input("RG:", value=rg_formatado, max_chars=12)
-    cpf_formatado = st.text_input("CPF:", value=cpf_formatado, max_chars=14)
+    rg_formatado = st.text_input("RG (formatado):", value=rg_formatado, max_chars=12)
+    cpf_formatado = st.text_input("CPF (formatado):", value=cpf_formatado, max_chars=14)
     
     foto = st.file_uploader("Envie uma foto (opcional):", type=["jpg", "jpeg", "png"])
 
