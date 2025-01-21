@@ -94,11 +94,9 @@ with col1:
                 st.success("Crachá gerado com sucesso!")
                 # Exibir o crachá gerado na coluna 2, ajustando para ficar mais para cima e à direita
                 with col2:
-                    st.write("\n" * 1)  # Um pequeno espaçamento para dar espaço
                     st.image(output_path, caption="Crachá Gerado", use_container_width=True)
                     
                     # Botão para download do crachá gerado
-                    st.write("\n" * 1)  # Adicionando espaçamento
                     with open(output_path, "rb") as file:
                         st.download_button(
                             label="Baixar Crachá",
@@ -108,6 +106,3 @@ with col1:
                         )
         else:
             st.error("Por favor, preencha todos os campos obrigatórios.")
-
-# Adicionando espaçamento entre as colunas para um layout mais harmônico
-st.write("\n" * 2)
