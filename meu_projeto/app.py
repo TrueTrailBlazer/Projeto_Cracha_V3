@@ -65,7 +65,7 @@ def gerar_cracha(nome, rg, cpf, foto_path=None):
 st.title("Gerador de Crachás")
 
 # Divisão da tela em duas colunas: uma para entradas e outra para o crachá
-col1, col2 = st.columns([1, 1])  # Relacionamento de 50% para cada coluna
+col1, col2 = st.columns([1, 2])  # Relacionamento de 33% para a coluna da esquerda e 66% para a coluna da direita
 
 # Coluna da esquerda (campos de entrada)
 with col1:
