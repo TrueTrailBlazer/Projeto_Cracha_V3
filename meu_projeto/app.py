@@ -28,8 +28,8 @@ def gerar_cracha(nome, rg, cpf, foto_path=None):
         draw = ImageDraw.Draw(template)
 
         # Configuração das fontes e tamanhos
-        fonte_nome = carregar_fonte(35)  # Fonte maior para o nome
-        fonte_dados = carregar_fonte(30)  # Fonte padrão para RG e CPF
+        fonte_nome = carregar_fonte(40)  # Fonte maior para o nome
+        fonte_dados = carregar_fonte(35)  # Fonte padrão para RG e CPF
 
         # Coordenadas para os campos de texto
         coord_nome = (50, 175)
@@ -64,51 +64,29 @@ def gerar_cracha(nome, rg, cpf, foto_path=None):
 # Interface Streamlit
 st.title("Gerador de Crachás")
 
-# Criar colunas com um espaçamento explícito utilizando o estilo CSS
-col1, col2 = st.columns([1, 1])  # Ambas as colunas com a mesma largura
+# Entrada de dados do usuário
+nome = st.text_input("Nome:")
+rg = st.text_input("RG:")
+cpf = st.text_input("CPF:")
+foto = st.file_uploader("Envie uma foto (opcional):", type=["jpg", "jpeg", "png"])
 
-# CSS para adicionar o espaçamento entre as colunas
-st.markdown(
-    """
-    <style>
-    .block-container {
-        padding-left: 30px;
-        padding-right: 30px;
-    }
-    </style>
-    """, unsafe_allow_html=True
-)
+# Criar a pasta 'static' se não existir
+if not os.path.exists("static"):
+    os.makedirs("static")
 
-# Coluna da esquerda (campos de entrada)
-with col1:
-    st.markdown("### Preencha os dados abaixo")
-    # Entrada de dados do usuário
-    nome = st.text_input("Nome:")
-    rg = st.text_input("RG:")
-    cpf = st.text_input("CPF:")
-    foto = st.file_uploader("Envie uma foto (opcional):", type=["jpg", "jpeg", "png"])
-
-    # Botão para gerar o crachá
-    if st.button("Gerar Crachá"):
-        if nome and rg and cpf:
-            # Salvar a foto carregada, se houver
-            foto_path = None
-            if foto:
-                foto_path = os.path.join("static", "foto_temp.jpg")
-                with open(foto_path, "wb") as f:
-                    f.write(foto.read())
-            # Gerar o crachá
-            output_path = gerar_cracha(nome, rg, cpf, foto_path)
-            if output_path:
-                st.success("Crachá gerado com sucesso!")
-        else:
-            st.error("Por favor, preencha todos os campos obrigatórios.")
-
-# Coluna da direita (crachá gerado)
-with col2:
+# Botão para gerar o crachá
+if st.button("Gerar Crachá"):
     if nome and rg and cpf:
+        # Salvar a foto carregada, se houver
+        foto_path = None
+        if foto:
+            foto_path = os.path.join("static", "foto_temp.jpg")
+            with open(foto_path, "wb") as f:
+                f.write(foto.read())
+        # Gerar o crachá
         output_path = gerar_cracha(nome, rg, cpf, foto_path)
         if output_path:
-            st.image(output_path, use_container_width=True)  # Usando container_width para a imagem se ajustar
-            # Botão para baixar o crachá
-            st.download_button(label="Baixar Crachá", data=open(output_path, "rb"), file_name="cracha_gerado.png", mime="image/png")
+            st.success("Crachá gerado com sucesso!")
+            st.image(output_path)
+    else:
+        st.error("Por favor, preencha todos os campos obrigatórios.")
