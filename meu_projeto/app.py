@@ -1,110 +1,122 @@
 import os
 import tempfile
 from pathlib import Path
+from io import BytesIO
 from PIL import Image, ImageDraw, ImageFont
 import streamlit as st
 
-# Constants (adjust these according to your template)
-TEXT_COLOR = "black"
-FONT_SIZES = {"name": 40, "data": 35}
-COORDINATES = {
-    "name": (50, 175),
+# Configurações (ajuste conforme seu template)
+COR_TEXTO = "black"
+TAMANHO_FONTES = {"nome": 40, "dados": 35}
+COORDENADAS = {
+    "nome": (50, 175),
     "rg": (50, 225),
     "cpf": (50, 275),
-    "photo": (220, 340),
-    "photo_size": (225, 240)
+    "foto": (220, 340),
+    "tamanho_foto": (225, 240)
 }
 
-def load_font(font_size: int, font_path: str = None) -> ImageFont.FreeTypeFont:
-    """Load font with fallback strategy."""
+def carregar_fonte(tamanho: int) -> ImageFont.FreeTypeFont:
+    """Carrega fonte com fallback para diferentes sistemas"""
     try:
-        font_path = font_path or os.path.join("fonts", "arialbd.ttf")
-        return ImageFont.truetype(font_path, font_size)
+        # Tenta primeiro a fonte Arial Bold
+        return ImageFont.truetype("arialbd.ttf", tamanho)
     except IOError:
-        try:  # Try system fallback font
-            return ImageFont.truetype("arialbd.ttf", font_size)
+        try:  # Fallback para fonte comum
+            return ImageFont.truetype("arial.ttf", tamanho)
         except IOError:
-            return ImageFont.load_default()  #Ultimate fallback
+            return ImageFont.load_default()  # Último fallback
 
-def process_photo(uploaded_file) -> str:
-    """Process and save uploaded photo with validation."""
-    if not uploaded_file:
+def processar_foto(arquivo_enviado) -> str:
+    """Processa e valida a foto enviada"""
+    if not arquivo_enviado:
         return None
         
     try:
-        img = Image.open(uploaded_file)
-        img.verify()  # Basic image validation
-        uploaded_file.seek(0)
+        img = Image.open(arquivo_enviado)
+        img.verify()
+        arquivo_enviado.seek(0)
         
-        # Save to temporary file
         with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as tmp:
-            tmp.write(uploaded_file.read())
+            tmp.write(arquivo_enviado.read())
             return tmp.name
     except Exception as e:
-        st.error(f"Invalid image file: {str(e)}")
+        st.error(f"Erro no processamento da foto: {str(e)}")
         return None
 
-def generate_badge(name: str, rg: str, cpf: str, photo_path: str = None) -> str:
-    """Generate badge image with user information."""
+def gerar_cracha(nome: str, rg: str, cpf: str, caminho_foto: str = None) -> bytes:
+    """Gera o crachá em memória e retorna bytes PNG"""
     try:
-        # Load template
-        template_path = Path(__file__).parent / "static/template_cracha.jpg"
-        if not template_path.exists():
-            raise FileNotFoundError(f"Template not found at {template_path}")
+        # Carrega template
+        caminho_template = Path(__file__).parent / "static/template_cracha.jpg"
+        if not caminho_template.exists():
+            raise FileNotFoundError(f"Template não encontrado em {caminho_template}")
             
-        template = Image.open(template_path)
-        draw = ImageDraw.Draw(template)
+        template = Image.open(caminho_template)
+        desenho = ImageDraw.Draw(template)
 
-        # Add text information
-        draw.text(COORDINATES["name"], f"Nome: {name}", 
-                 fill=TEXT_COLOR, font=load_font(FONT_SIZES["name"]))
-        draw.text(COORDINATES["rg"], f"RG: {rg}", 
-                 fill=TEXT_COLOR, font=load_font(FONT_SIZES["data"]))
-        draw.text(COORDINATES["cpf"], f"CPF: {cpf}", 
-                 fill=TEXT_COLOR, font=load_font(FONT_SIZES["data"]))
+        # Adiciona textos
+        desenho.text(
+            COORDENADAS["nome"], 
+            f"Nome: {nome}", 
+            fill=COR_TEXTO, 
+            font=carregar_fonte(TAMANHO_FONTES["nome"])
+        )
+        desenho.text(
+            COORDENADAS["rg"], 
+            f"RG: {rg}", 
+            fill=COR_TEXTO, 
+            font=carregar_fonte(TAMANHO_FONTES["dados"])
+        )
+        desenho.text(
+            COORDENADAS["cpf"], 
+            f"CPF: {cpf}", 
+            fill=COR_TEXTO, 
+            font=carregar_fonte(TAMANHO_FONTES["dados"])
+        )
 
-        # Add photo if provided
-        if photo_path:
-            photo = Image.open(photo_path).convert("RGB")
-            photo.thumbnail(COORDINATES["photo_size"])  # Maintain aspect ratio
-            template.paste(photo, COORDINATES["photo"])
+        # Adiciona foto
+        if caminho_foto:
+            foto = Image.open(caminho_foto).convert("RGB")
+            foto.thumbnail(COORDENADAS["tamanho_foto"])
+            template.paste(foto, COORDENADAS["foto"])
 
-        # Save to temporary file
-        output_path = f"cracha_{name.replace(' ', '_')}.png"
-        template.save(output_path)
-        return output_path
+        # Salva em memória
+        buffer_imagem = BytesIO()
+        template.save(buffer_imagem, format="PNG")
+        return buffer_imagem.getvalue()
 
     except Exception as e:
-        st.error(f"Error generating badge: {str(e)}")
+        st.error(f"Erro na geração do crachá: {str(e)}")
         return None
 
-# Streamlit UI
+# Interface do usuário
 def main():
-    st.title("Gerador de Crachás Profissional")
+    st.title("Gerador de Crachás Oficial")
     
-    with st.form("badge_form"):
-        name = st.text_input("Nome completo:", max_chars=50)
+    with st.form("formulario_cracha"):
+        nome = st.text_input("Nome completo:", max_chars=50)
         rg = st.text_input("RG:", max_chars=15)
         cpf = st.text_input("CPF:", max_chars=14)
-        photo = st.file_uploader("Foto (opcional):", 
-                                type=["jpg", "jpeg", "png"],
-                                accept_multiple_files=False)
+        foto = st.file_uploader("Foto (opcional):", type=["jpg", "jpeg", "png"])
         
         if st.form_submit_button("Gerar Crachá"):
-            if not all([name, rg, cpf]):
+            if not all([nome, rg, cpf]):
                 st.error("Preencha todos os campos obrigatórios!")
                 return
                 
-            photo_path = process_photo(photo)
-            output_path = generate_badge(name, rg, cpf, photo_path)
+            caminho_foto = processar_foto(foto)
+            dados_cracha = gerar_cracha(nome, rg, cpf, caminho_foto)
             
-            if output_path and Path(output_path).exists():
-                st.success("Crachá gerado com sucesso!")
-                st.image(output_path)
-                st.download_button("Baixar Crachá", 
-                                  open(output_path, "rb").read(),
-                                  file_name=output_path,
-                                  mime="image/png")
+            if dados_cracha:
+                st.success("Cracha gerado com sucesso!")
+                st.image(dados_cracha)
+                st.download_button(
+                    "Baixar Crachá",
+                    data=dados_cracha,
+                    file_name=f"cracha_{nome.replace(' ', '_')}.png",
+                    mime="image/png"
+                )
 
 if __name__ == "__main__":
     main()
