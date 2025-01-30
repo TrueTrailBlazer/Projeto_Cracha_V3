@@ -13,7 +13,8 @@ COORDENADAS = {
     "rg": (50, 220),
     "cpf": (50, 270),
     "foto": (220, 330),
-    "tamanho_foto": (230, 250)
+    "tamanho_foto": (225, 240),
+    "coord_foto": (220,340)
 }
 
 def carregar_fonte(tamanho: int) -> ImageFont.FreeTypeFont:
