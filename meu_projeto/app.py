@@ -24,7 +24,7 @@ def load_font(font_size: int, font_path: str = None) -> ImageFont.FreeTypeFont:
         try:  # Try system fallback font
             return ImageFont.truetype("arialbd.ttf", font_size)
         except IOError:
-            return ImageFont.load_default()  Ultimate fallback
+            return ImageFont.load_default()  #Ultimate fallback
 
 def process_photo(uploaded_file) -> str:
     """Process and save uploaded photo with validation."""
