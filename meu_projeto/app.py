@@ -34,7 +34,7 @@ def processar_foto(arquivo_enviado) -> str:
     try:
         with Image.open(arquivo_enviado) as img:
             img.verify()
-            arquivo_enviado
+            arquivo_enviado.seek(0)
             
             with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as tmp:
                 img.convert("RGB").resize(COORDENADAS["tamanho_foto"]).save(tmp, format="JPEG")
