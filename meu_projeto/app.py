@@ -34,7 +34,7 @@ def processar_foto(arquivo_enviado) -> str:
     try:
         with Image.open(arquivo_enviado) as img:
             img.verify()
-            arquivo_enviado.seek(0)
+            arquivo_enviado
             
             with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as tmp:
                 img.convert("RGB").resize(COORDENADAS["tamanho_foto"]).save(tmp, format="JPEG")
@@ -71,7 +71,7 @@ def gerar_cracha(nome: str, rg: str, cpf: str, caminho_foto: str = None) -> byte
         return None
 
 def main():
-    st.title("Gerador de Crachás Oficial")
+    st.title("Gerador de Crachás Shell")
     
     # Usar session_state para manter o crachá gerado
     if 'badge_data' not in st.session_state:
