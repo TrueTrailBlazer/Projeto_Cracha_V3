@@ -1,7 +1,7 @@
 Gerador de Crachás em Python com Streamlit
 ==========================================
 
-Um gerador de crachás simples e funcional, feito com carinho em Python + Streamlit. Você insere os dados, escolhe uma foto (ou não), clica num botão e... pá! Crachá pronto.
+Um gerador de crachás simples e funcional, feito com carinho em Python + Streamlit. Você insere os dados, escolhe uma foto (ou não) e gere o crachá com os dados.
 
 🔗 Acesse o app online:
 https://projetocrachav3-dnuusncivg5dpvybaena55.streamlit.app/
@@ -17,7 +17,7 @@ FUNCIONALIDADES
   - Foto (opcional)
 - Interface web feita com Streamlit
 - Geração automática de imagem .png
-- Fontes com negrito para um visual mais profissa
+- Fontes com negrito para um visual mais profissional
 - Tratamento de erros e mensagens amigáveis
 
 ----------------------------------------
